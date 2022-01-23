@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "686ce29f-662b-4a32-84d4-202cf186f2d5": {
+      "ProjectGuid": "686ce29f-662b-4a32-84d4-202cf186f2d5",
+      "DisplayName": "CustomerRegAPI",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "f0295fbb-3ba5-42d3-b869-cbaaa4209fb4": {
+      "ProjectGuid": "f0295fbb-3ba5-42d3-b869-cbaaa4209fb4",
+      "DisplayName": "BusinessLogic",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
