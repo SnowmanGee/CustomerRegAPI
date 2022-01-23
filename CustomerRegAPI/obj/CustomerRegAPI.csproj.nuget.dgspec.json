@@ -4,6 +4,65 @@
     "E:\\git-private\\CustomerRegAPI\\CustomerRegAPI\\CustomerRegAPI.csproj": {}
   },
   "projects": {
+    "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\BusinessLogic.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\BusinessLogic.csproj",
+        "projectName": "BusinessLogic",
+        "projectPath": "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\BusinessLogic.csproj",
+        "packagesPath": "C:\\Users\\andig_000\\.nuget\\packages\\",
+        "outputPath": "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\andig_000\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "E:\\git-private\\CustomerRegAPI\\CustomerRegAPI\\CustomerRegAPI.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -32,7 +91,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\BusinessLogic.csproj": {
+                "projectPath": "E:\\git-private\\CustomerRegAPI\\BusinessLogic\\BusinessLogic.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

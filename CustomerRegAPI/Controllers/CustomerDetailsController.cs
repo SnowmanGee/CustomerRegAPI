@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CustomerRegAPI.Models;
+using BusinessLogic.Interfaces;
 
 namespace CustomerRegAPI.Controllers
 {
@@ -12,15 +13,18 @@ namespace CustomerRegAPI.Controllers
     public class CustomerDetailsController : ControllerBase
     {
         private readonly CustomerRegContext _context;
+        private readonly IValidation _validation;
 
         /// <summary>
-        /// Basic constructor injecting DbContext into controller
+        /// Basic constructor injecting DbContext and validation into controller
         /// </summary>
         /// <param name="context"></param>
         /// <param name="validation"></param>
-        public CustomerDetailsController(CustomerRegContext context)
+        public CustomerDetailsController(CustomerRegContext context,
+                                         IValidation validation)
         {
             _context = context;
+            _validation = validation;
         }
 
         /// <summary>
@@ -54,7 +58,7 @@ namespace CustomerRegAPI.Controllers
         }
 
         /// <summary>
-        /// Updates a record currently held in the db for the id passed in
+        /// Updates a record currently held in the db for the id passed in following successful validation
         /// </summary>
         /// <param name="id"></param>
         /// <param name="customerDetail"></param>
@@ -64,7 +68,7 @@ namespace CustomerRegAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomerDetail(int id, CustomerDetail customerDetail)
         {
-            if (id != customerDetail.CustomerID)
+            if (id != customerDetail.CustomerID || !ValidateCustomerDetails(customerDetail))
             {
                 return BadRequest();
             }
@@ -91,7 +95,7 @@ namespace CustomerRegAPI.Controllers
         }
 
         /// <summary>
-        /// Creates new customer record .
+        /// Creates new customer record ensuring validation before commiting.
         /// </summary>
         /// <param name="customerDetail"></param>
         /// <returns>StatusCode denoting the calls outcome.</returns>
@@ -100,6 +104,10 @@ namespace CustomerRegAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerDetail>> PostCustomerDetail(CustomerDetail customerDetail)
         {
+            if (!ValidateCustomerDetails(customerDetail))
+            {
+                return BadRequest("Invalid customer details submitted.");
+            }
             _context.CustomerDetails.Add(customerDetail);
             await _context.SaveChangesAsync();
 
@@ -132,10 +140,61 @@ namespace CustomerRegAPI.Controllers
         /// Checks the CustomerDetail table to ensure a matching value is found.
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>Boolean True if matching record found. False if not.</returns>
+        /// <returns></returns>
         private bool CustomerDetailExists(int id)
         {
             return _context.CustomerDetails.Any(e => e.CustomerID == id);
+        }
+
+        /// <summary>
+        /// Checks both the required and optional values within the model passed into the method.
+        /// </summary>
+        /// <param name="details"></param>
+        /// <returns>Boolean true if all validation passes. Boolean false if not.</returns>
+        private bool ValidateCustomerDetails(CustomerDetail details)
+        {
+            return ValidateRequiredCustomerDetails(details) && ValidateOptionalDetails(details);
+        }
+
+        /// <summary>
+        /// Checks that the required fields have values passed into the call
+        /// </summary>
+        /// <param name="details"></param>
+        /// <returns>Boolean true if all required values are present and correct. False if not.</returns>
+        private bool ValidateRequiredCustomerDetails(CustomerDetail details)
+        {
+            if (_validation.ValidateString(details.FirstName, 3, 50) &&
+                _validation.ValidateString(details.Surname, 3, 50) &&
+                _validation.ValidatePolicyReference(details.PolicyReference))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks that the Optional customer details are valid.
+        /// </summary>
+        /// <param name="details"></param>
+        /// <returns>Boolean true if one of the optional values required are present and correct. Boolean false if
+        /// checks are not passed.</returns>
+        private bool ValidateOptionalDetails(CustomerDetail details)
+        {
+            if (string.IsNullOrEmpty(details.EmailAddress))
+            {
+                if (_validation.ValidateAgePlusEighteen(details.DateOfBirth ?? DateTime.Now))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (_validation.ValidateEMail(details.EmailAddress))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
     }
