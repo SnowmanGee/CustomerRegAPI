@@ -15,8 +15,13 @@ namespace CustomerRegAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=CustomerReg;Trusted_Connection=True;");
+                var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                     .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+                     .AddJsonFile("appsettings.json", optional: false)
+                     .AddJsonFile($"appsettings.{envName}.json", optional: false)
+                     .Build();
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("CustomerDatabase"));
             }
         }
 
