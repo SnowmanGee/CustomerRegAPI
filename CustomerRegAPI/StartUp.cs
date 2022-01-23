@@ -1,10 +1,25 @@
 using BusinessLogic.Helpers;
 using BusinessLogic.Interfaces;
 using CustomerRegAPI.Models;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Customer Registration",
+        Version = "v1",
+        Description = "An API Assessment task"
+    });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
+
 builder.Services.AddDbContext<CustomerRegContext>(options =>
 {
     CustomerRegContext.Configure(options);
@@ -21,7 +36,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customer Registration v1");
+    });
 }
 
 app.UseHttpsRedirection();
