@@ -1,2 +1,2 @@
 *.suo
-CustomerRegAPI/obj/Debug/net6.0/CustomerRegAPI.csproj.AssemblyReference.cache
+*.cache
